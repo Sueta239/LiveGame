@@ -13,7 +13,7 @@ namespace Denis
         List<int> be_born = new List<int>() { };
         public Form1()
         {
-            this.Text = "оп-оп живЄм живЄм";         
+            this.Text = "Live";         
             InitializeComponent();
             MySettinngs();
             CreateMap();
@@ -76,17 +76,17 @@ namespace Denis
             for (int i = 0; i < MapSize; i++)
                 for (int j = 0; j < MapSize; j++)
                 {
-                    if (be_born.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 0)   // оживает
+                    if (be_born.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 0)   
                     {
                         next_map[i, j] = 1;
                         live_map[i, j] += 1;
                     }
-                    if (continue_to_live.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 1) // продолжает жить
+                    if (continue_to_live.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 1) 
                     {
                         next_map[i, j] = 1;
                         live_map[i, j] += 1;
                     }
-                    if (!continue_to_live.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 1) // умирает
+                    if (!continue_to_live.Contains(NumberOfNeighbors(i, j)) && map[i, j] == 1) 
                     {
                         next_map[i, j] = 0;
                         live_map[i, j] = 0;
@@ -155,19 +155,23 @@ namespace Denis
             NewMap();
         }
 
+        private void SetZoom()
+        {
+            field.Width = fieldsz * zoom;
+            field.Height = fieldsz * zoom;
+            Cellize = originalCellize * zoom;
+            LabelZoom.Text = $"{zoom}";
+            field.Image = new Bitmap(field.Width, field.Height);
+            g = Graphics.FromImage(field.Image);
+            NewMap();
+        }
 
-        private void PlusZoom_Click(object sender, EventArgs e)
+            private void PlusZoom_Click(object sender, EventArgs e)
         {
             if (zoom < 5)
             {
                 zoom = zoom + 1;
-                field.Width = fieldsz * zoom;
-                field.Height = fieldsz * zoom;
-                Cellize = originalCellize * zoom;
-                LabelZoom.Text = $"{zoom}";
-                field.Image = new Bitmap(field.Width, field.Height);
-                g = Graphics.FromImage(field.Image);
-                NewMap();
+                SetZoom();
             }
         }
 
@@ -176,13 +180,7 @@ namespace Denis
             if (zoom > 1)
             {
                 zoom = zoom - 1;
-                field.Width = fieldsz * zoom;
-                field.Height =  fieldsz * zoom;
-                Cellize = originalCellize * zoom;
-                LabelZoom.Text = $"{zoom}";
-                field.Image = new Bitmap(field.Width, field.Height);
-                g = Graphics.FromImage(field.Image);
-                NewMap();
+                SetZoom();
             }
         }
         private void NullZoom()
@@ -190,13 +188,7 @@ namespace Denis
             while (zoom > 1)
             {
                 zoom = zoom - 1;
-                field.Width = fieldsz * zoom;
-                field.Height = fieldsz * zoom;
-                Cellize = originalCellize * zoom;
-                LabelZoom.Text = $"{zoom}";
-                field.Image = new Bitmap(field.Width, field.Height);
-                g = Graphics.FromImage(field.Image);
-                NewMap();
+                SetZoom();
             }
         }
 
@@ -233,7 +225,7 @@ namespace Denis
             int y = e.Y / Cellize;
             if (x < 0 || y < 0 || x >= MapSize || y >= MapSize)
                 return;
-            Info.Text = $" летка {x} : {y} живЄт {live_map[x,y]} ходов";
+            Info.Text = $"cell {x} : {y} lives {live_map[x,y]} moves";
         }
 
         private void TextSave_Click(object sender, EventArgs e)
